@@ -4,14 +4,10 @@ let isNumber = function (n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
-let income = 'фриланс';
-let mission = 950000;
-let period = 12;
 let money;
-
 let start = function () {
   do {
-   money = prompt('Ваш месячный доход?');
+    money = prompt('Ваш месячный доход?');
   } while (!isNumber(money));
   return money;
 };
@@ -21,42 +17,47 @@ start();
 let appData = {
   income: {},
   addIncome: [],
-  // expenses: {},
+  expenses: {},
   addExpenses: [],
   deposit: false,
   mission: 50000,
   period: 12,
-  asking: function() {
+  
+  asking: function () {
     let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'газ, вода');
-        appData.addExpenses = addExpenses.toLowerCase().split(', ');
-        appData.deposit = confirm('Есть ли у вас депозит в банке?', false);
+    appData.addExpenses = addExpenses.toLowerCase().split(', ');
+    appData.deposit = confirm('Есть ли у вас депозит в банке?', false);
+
+    for (let i = 0; i < 2; i++) {
+      let key = prompt('Введите обязательную статью расходов?');
+      let tmp;
+      do {
+        tmp = +prompt('Во сколько это обойдется?');
+        appData.expenses[key] = tmp;
+      } while (!isNumber(tmp));
+    }
   },
+  
   budget: money,
   budgetDey: 0,
   budgetMonth: 0,
   expensesMonth: 0,
 
-  expenses: [],
   getExpensesMonth: function () {
-    let sum = 0;  
-    for (let i = 0; i < 2; i++) {
-      appData.expenses[i] = prompt('Введите обязательную статью расходов?');
-      let tmp;
-      do {
-        tmp = +prompt('Во сколько это обойдется?');
-      } while (!isNumber(tmp));
-      sum += tmp;
+    for (let key in appData.expenses) {                                      
+       appData.expensesMonth += appData.expenses[key];            // сумма обязательных расходов
     }
-    console.log(appData.expenses);
-    return sum;                                               // сумма обязательных расходов
+    return appData.expensesMonth;
   },
 
-  getAccumulatedMonth: function () {                          // накопления за месяц =
-    return appData.budget - appData.expensesMonth;            // доход - обязательные расходы
-  }, 
+  getBudget: function () {                                            
+    appData.budgetMonth = appData.budget - appData.expensesMonth; // накопления за месяц = доход - обязательные расходы
+    appData.budgetDey = appData.budgetMonth / 30;                 // доход за день = акопления за месяц / 30
+    return appData.budgetMonth, appData.budgetDey;
+  },
 
-  getTargetMonth: function () {                               // за сколько месяцев достигнем результата =
-    return appData.mission / appData.budgetMonth;             // цель / накопления за месяц
+  getTargetMonth: function () {                                   // за сколько месяцев достигнем результата =
+    return appData.mission / appData.budgetMonth;                 // цель / накопления за месяц
   },
 
   getStatusIncome: function () {
@@ -72,24 +73,19 @@ let appData = {
   },
 };
 
-console.log("Период равен " + period + ' месяцев');
-console.log("Цель заработать " + mission + ' рублей');
-console.log(appData.addExpenses.length);
+appData.asking();
 
-appData.budgetDey = appData.getAccumulatedMonth() / 30;
-appData.expensesMonth = appData.getExpensesMonth();
-appData.budgetMonth = appData.getAccumulatedMonth();
+console.log('Сумма обязательных расходов: ', appData.getExpensesMonth());
 
-console.log('Сумма обязательных расходов: ', appData.expensesMonth);
-
-console.log('Накопления за месяц:', appData.budgetMonth);
-
-console.log('Бюджет на день: ', Math.floor(appData.budgetDey));
-
-console.log(appData.getStatusIncome());
-
-if (appData.getAccumulatedMonth() <= 0) {
+if (appData.getBudget() <= 0) {
   console.log('Цель не будет достигнута');
 } else {
   console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' мес.');
+}
+
+console.log(appData.getStatusIncome());
+
+console.log("Наша программа включает в себя данные: ");
+for (let key in appData) {
+  console.log(key, appData[key]);
 }
