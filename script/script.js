@@ -22,13 +22,17 @@ let appData = {
   deposit: false,
   mission: 50000,
   period: 12,
+  budget: money,
+  budgetDey: 0,
+  budgetMonth: 0,
+  expensesMonth: 0,
 
   asking: function () {
     let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'газ, вода');
     appData.addExpenses = addExpenses.toLowerCase().split(', ');
     appData.deposit = confirm('Есть ли у вас депозит в банке?', false);
 
-    for (let i = 0; Object.keys(appData.expenses).length < 3; i++) {
+    while (Object.keys(appData.expenses).length < 3) {
       let key;
       do {
         key = prompt('Введите обязательную статью расходов?');
@@ -41,11 +45,6 @@ let appData = {
     }
   },
 
-  budget: money,
-  budgetDey: 0,
-  budgetMonth: 0,
-  expensesMonth: 0,
-
   getExpensesMonth: function () {
     for (let key in appData.expenses) {
       appData.expensesMonth += appData.expenses[key];            // сумма обязательных расходов
@@ -55,7 +54,7 @@ let appData = {
 
   getBudget: function () {
     appData.budgetMonth = appData.budget - appData.expensesMonth; // накопления за месяц = доход - обязательные расходы
-    appData.budgetDey = appData.budgetMonth / 30;                 // доход за день = акопления за месяц / 30
+    appData.budgetDey = Math.floor(appData.budgetMonth / 30);                 // доход за день = акопления за месяц / 30
     return appData.budgetMonth, appData.budgetDey;
   },
 
