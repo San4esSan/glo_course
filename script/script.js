@@ -33,6 +33,9 @@ let appData = {
 
     if (confirm('Есть ли у вас дополнительный источник заработка?')) {
       let itemIncome = prompt('Какой у вас дополнительный заработок', 'Таксую');
+      while (isNumber(itemIncome)){
+        itemIncome = prompt('Какой у вас дополнительный заработок', 'Таксую');
+      }
       let cashIncome;
       do {
         cashIncome = +prompt('Сколько в месяц вы на этом зарабатываете?', 10000);
@@ -41,15 +44,25 @@ let appData = {
 
     }
 
-    let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'газ, вода');
+    let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'газ,   вода ,InteRnet,Tel свЕт').toLowerCase().replace(/(\s*,\s*)|(\s+)/g, ', ');
+
+    while (isNumber(addExpenses)){
+      addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'газ,   вода ,InteRnet,Tel свЕт').toLowerCase().replace(/(\s*,\s*)|(\s+)/g, ', ');
+    }
     appData.addExpenses = addExpenses.toLowerCase().split(', ');
+
+    for (let i = 0; i < appData.addExpenses.length; i++) {
+      appData.addExpenses[i] = appData.addExpenses[i].slice(0, 1).toUpperCase() + appData.addExpenses[i].slice(1);
+    }
+
     appData.deposit = confirm('Есть ли у вас депозит в банке?', false);
 
     while (Object.keys(appData.expenses).length < 2) {
-      let key;
-      do {
+      let key = prompt('Введите обязательную статью расходов?');
+       
+      while (isNumber(key)){
         key = prompt('Введите обязательную статью расходов?');
-      } while (!key);
+      }
 
       let tmp;
       do {
@@ -61,14 +74,14 @@ let appData = {
 
   getExpensesMonth: function () {
     for (let key in appData.expenses) {
-      appData.expensesMonth += appData.expenses[key];            // сумма обязательных расходов
+      appData.expensesMonth += appData.expenses[key];             // сумма обязательных расходов
     }
     return appData.expensesMonth;
   },
 
   getBudget: function () {
     appData.budgetMonth = appData.budget - appData.expensesMonth; // накопления за месяц = доход - обязательные расходы
-    appData.budgetDey = Math.floor(appData.budgetMonth / 30);                 // доход за день = акопления за месяц / 30
+    appData.budgetDey = Math.floor(appData.budgetMonth / 30);     // доход за день = акопления за месяц / 30
     return appData.budgetMonth, appData.budgetDey;
   },
 
@@ -124,4 +137,4 @@ for (let key in appData) {
 
 appData.getInfoDeposit();
 
-console.log(appData.addExpenses.join(', ').charAt(0).toUpperCase());
+console.log(appData.addExpenses.join(', '));
