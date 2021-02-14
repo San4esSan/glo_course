@@ -52,6 +52,7 @@ let appData = {
     appData.getAddExpenses();
     appData.getAddIncome();
     appData.getBudget();
+
     appData.showResult();
   },
 
@@ -64,14 +65,6 @@ let appData = {
     targetMonthValue.value = Math.ceil(appData.getTargetMonth());
     incomePeriodValue.value = appData.calcPeriod();
   },
-
-  btnStart: function () {
-    if (salaryAmount.value === '') {
-      start.style.backgroundColor ="red";
-      start.event.preventDefault();
-    }
-  },
-
 
   addExpensesBlock: function () {
     let cloneExpensesItem = expensesItems[0].cloneNode(true);
@@ -184,29 +177,20 @@ let appData = {
 };
 
 
+start.disabled = true;
+start.style.backgroundColor = "#efefef";
 
-start.addEventListener(appData.btnStart);
-start.addEventListener('click', appData.start);
+salaryAmount.addEventListener('input', function () {
+  if (salaryAmount.value !== '') {
+    start.disabled = false;
+    start.style.backgroundColor = '#353a43';
+    start.addEventListener('click', appData.start);
+  }
+});
+
+periodSelect.addEventListener('input', function () {
+  let period = document.querySelector('.period-amount').innerHTML = periodSelect.value;
+});
 
 expensesPlas.addEventListener('click', appData.addExpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
-
-
-
-
-// if (appData.getBudget() <= 0) {
-//   console.log('Цель не будет достигнута');
-// } else {
-//   console.log('Цель будет достигнута за ' + Math.ceil(appData.getTargetMonth()) + ' мес.');
-// }
-
-
-// console.log('');
-// console.log("Наша программа включает в себя данные: ");
-// for (let key in appData) {
-//   console.log(key, appData[key]);
-// }
-
-// appData.getInfoDeposit();
-
-// console.log(appData.addExpenses.join(', '));
