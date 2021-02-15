@@ -190,6 +190,7 @@ salaryAmount.addEventListener('input', function () {
 
 periodSelect.addEventListener('input', function () {
   let period = document.querySelector('.period-amount').innerHTML = periodSelect.value;
+  return appData.showResult();
 });
 
 expensesPlas.addEventListener('click', appData.addExpensesBlock);
