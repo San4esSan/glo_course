@@ -62,6 +62,8 @@ let appData = {
       inputs1[i].value = '';
     }
 
+    periodSelect.value = '1';
+
     var inputs2 = result.querySelectorAll('input');
     for (var i = 0; i < inputs2.length; i++) {
       inputs2[i].value = '';
@@ -218,6 +220,9 @@ startBtn.addEventListener('click', function () {
 cancelBtn.addEventListener('click', function () {
   appData.reset.bind(appData)();
   appData.reset();
+  document.querySelectorAll('input[type=text]').forEach(function(item){
+    item.disabled = false;
+});
 });
 
 periodSelect.addEventListener('input', function () {
