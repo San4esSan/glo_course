@@ -217,6 +217,7 @@ let appData = {
     btnExpAdd.removeAttribute('disabled');
     btnIncAdd.removeAttribute('disabled');
     checkBox.checked = false;
+
   },
 };
 
@@ -228,10 +229,11 @@ salaryAmount.addEventListener('input', function () {
 
 startBtn.addEventListener('click', function () {
   appData.start.bind(appData)();
-  document.querySelectorAll('input[type=text]').forEach(function(item){
+  document.querySelectorAll('input[type=text]').forEach(function (item) {
     item.disabled = true;
-});
-   startBtn.style.display = 'none';
+  });
+  
+  startBtn.style.display = 'none';
   cancelBtn.style.display = 'block';
 });
 
