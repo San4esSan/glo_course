@@ -49,6 +49,8 @@ const AppData = function () {
 AppData.prototype.check = function () {
   if (salaryAmount.value !== '' && isNumber(salaryAmount.value)) {
     startBtn.removeAttribute('disabled');
+    startBtn.disabled = false;
+    startBtn.style.backgroundColor = '#353a43';
   }
 };
 
@@ -91,7 +93,6 @@ AppData.prototype.showResult = function () {
   incPeriodValue.value = this.calcPeriod();
 
 };
-
 
 AppData.prototype.addExpensesBlock = function () {
   let cloneExpensesItem = expensesItems[0].cloneNode(true);
@@ -218,13 +219,17 @@ AppData.prototype.reset = function () {
   });
 
   for (let i = 1; i < incomeItems.length; i++) {
-    incomeItems[i].parentNode.removeChild(incomeItems[i]);
-    btnIncAdd.style.display = 'block';
+    if (i>0){
+      incomeItems[i].remove(incomeItems[i]);
+      btnIncAdd.style.display = 'block';
+    }
   };
 
   for (let i = 1; i < expensesItems.length; i++) {
-    expensesItems[i].parentNode.removeChild(expensesItems[i]);
+    if (i>0){
+    expensesItems[i].remove(expensesItems[i]);
     btnExpAdd.style.display = 'block';
+    }
   };
 
   this.budget = 0;
@@ -245,9 +250,14 @@ AppData.prototype.reset = function () {
   btnExpAdd.removeAttribute('disabled');
   btnIncAdd.removeAttribute('disabled');
   checkBox.checked = false;
+  startBtn.style.backgroundColor = "#efefef";
+  startBtn.disabled = true;
 };
 
 AppData.prototype.eventListeners = function () {
+  startBtn.style.backgroundColor = "#efefef";
+  startBtn.disabled = true;
+
   startBtn.addEventListener('click', appData.start.bind(appData));
   btnExpAdd.addEventListener('click', appData.addExpensesBlock);
   btnIncAdd.addEventListener('click', appData.addIncomeBlock);
@@ -266,7 +276,6 @@ AppData.prototype.eventListeners = function () {
     addExp.push(element);
   };
 }
-
 
 const appData = new AppData();
 console.log(appData);
