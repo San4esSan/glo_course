@@ -22,6 +22,7 @@ let periodSelect = document.querySelector('.period-select');
 let periodAmount = document.querySelector('.period-amount');
 let additionalExpensesItem = document.querySelector('.additional_expenses-item');
 let targetAmount = document.querySelector('.target-amount');
+let income = document.querySelectorAll('.income');
 let incomeItems = document.querySelectorAll('.income-items');
 let main = document.querySelector('.main');
 let result = document.querySelector('.result');
@@ -189,14 +190,21 @@ let appData = {
       elem.value = '';
     });
 
-    for (let i = 1; i < incomeItems.length; i++) {
-      incomeItems[i].parentNode.removeChild(incomeItems[i]);
-      btnIncAdd.style.display = 'block';
+
+
+    for (let i = 0; i < incomeItems.length; i++) {
+      if (i > 0) {
+        incomeItems[i].remove(incomeItems[i]);
+        btnIncAdd.style.display = 'block';
+      }
+
     };
 
-    for (let i = 1; i < expensesItems.length; i++) {
-      expensesItems[i].parentNode.removeChild(expensesItems[i]);
+    for (let i = 0; i < expensesItems.length; i++) {
+      if (i > 0) {
+      expensesItems[i].remove(expensesItems[i]);
       btnExpAdd.style.display = 'block';
+      }
     };
 
     this.budget = 0;
@@ -221,18 +229,23 @@ let appData = {
   },
 };
 
+startBtn.style.backgroundColor = "#efefef";
+startBtn.disabled = true;
+
 salaryAmount.addEventListener('input', function () {
   if (salaryAmount.value !== '' && isNumber(salaryAmount.value)) {
     startBtn.disabled = false;
+    startBtn.style.backgroundColor = '#353a43';
   }
 });
 
 startBtn.addEventListener('click', function () {
-  appData.start.bind(appData)();
-  document.querySelectorAll('input[type=text]').forEach(function (item) {
-    item.disabled = true;
-  });
-  
+  if (salaryAmount.value !== '') {
+    appData.start.bind(appData)();
+    document.querySelectorAll('input[type=text]').forEach(function (item) {
+      item.disabled = true;
+    });
+  }
   startBtn.style.display = 'none';
   cancelBtn.style.display = 'block';
 });
@@ -244,7 +257,8 @@ periodSelect.addEventListener('input', function () {
 
 cancelBtn.addEventListener('click', function () {
   appData.reset.bind(appData)();
-  appData.reset();
+  startBtn.style.backgroundColor = "#efefef";
+  startBtn.disabled = true;
 });
 
 btnExpAdd.addEventListener('click', appData.addExpensesBlock);
